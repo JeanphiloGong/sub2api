@@ -105,6 +105,10 @@ func (s *emailSyncRepoStub) UpdateBalance(context.Context, int64, float64) error
 
 func (s *emailSyncRepoStub) DeductBalance(context.Context, int64, float64) error { return nil }
 
+func (s *emailSyncRepoStub) TransferBalance(context.Context, BalanceTransferInput) (*BalanceTransfer, error) {
+	return nil, fmt.Errorf("unexpected TransferBalance call")
+}
+
 func (s *emailSyncRepoStub) UpdateConcurrency(context.Context, int64, int) error { return nil }
 
 func (s *emailSyncRepoStub) ExistsByEmail(context.Context, string) (bool, error) { return false, nil }
@@ -113,8 +117,12 @@ func (s *emailSyncRepoStub) RemoveGroupFromAllowedGroups(context.Context, int64)
 	return 0, nil
 }
 
-func (s *emailSyncRepoStub) BatchSetConcurrency(context.Context, []int64, int) (int, error) { return 0, nil }
-func (s *emailSyncRepoStub) BatchAddConcurrency(context.Context, []int64, int) (int, error) { return 0, nil }
+func (s *emailSyncRepoStub) BatchSetConcurrency(context.Context, []int64, int) (int, error) {
+	return 0, nil
+}
+func (s *emailSyncRepoStub) BatchAddConcurrency(context.Context, []int64, int) (int, error) {
+	return 0, nil
+}
 
 func (s *emailSyncRepoStub) AddGroupToAllowedGroups(context.Context, int64, int64) error { return nil }
 
