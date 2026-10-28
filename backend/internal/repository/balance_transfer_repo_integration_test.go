@@ -24,6 +24,10 @@ func TestUserRepositoryTransferBalance_AppliesAtomicTransfer(t *testing.T) {
 		PasswordHash: "hash",
 		Balance:      10,
 	})
+	t.Cleanup(func() {
+		_, err := integrationDB.ExecContext(ctx, "DELETE FROM balance_transfers WHERE from_user_id = $1", from.ID)
+		require.NoError(t, err)
+	})
 	to := mustCreateUser(t, client, &service.User{
 		Email:        fmt.Sprintf("transfer-to-%d@example.com", time.Now().UnixNano()),
 		PasswordHash: "hash",
@@ -59,6 +63,10 @@ func TestUserRepositoryTransferBalance_ReplaysExternalID(t *testing.T) {
 		Email:        fmt.Sprintf("transfer-replay-from-%d@example.com", time.Now().UnixNano()),
 		PasswordHash: "hash",
 		Balance:      10,
+	})
+	t.Cleanup(func() {
+		_, err := integrationDB.ExecContext(ctx, "DELETE FROM balance_transfers WHERE from_user_id = $1", from.ID)
+		require.NoError(t, err)
 	})
 	to := mustCreateUser(t, client, &service.User{
 		Email:        fmt.Sprintf("transfer-replay-to-%d@example.com", time.Now().UnixNano()),
@@ -97,6 +105,10 @@ func TestUserRepositoryTransferBalance_RejectsExternalIDConflict(t *testing.T) {
 		Email:        fmt.Sprintf("transfer-conflict-from-%d@example.com", time.Now().UnixNano()),
 		PasswordHash: "hash",
 		Balance:      10,
+	})
+	t.Cleanup(func() {
+		_, err := integrationDB.ExecContext(ctx, "DELETE FROM balance_transfers WHERE from_user_id = $1", from.ID)
+		require.NoError(t, err)
 	})
 	to := mustCreateUser(t, client, &service.User{
 		Email:        fmt.Sprintf("transfer-conflict-to-%d@example.com", time.Now().UnixNano()),
